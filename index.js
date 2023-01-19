@@ -39,3 +39,8 @@ client.login(process.env.TOKEN)
         console.error(chalk.red('[DISCORD.JS] Login error: ' + e))
         process.exit(0)
     })
+
+const express = require('express')
+const app = express()
+app.get('/', (req, res) => res.send('Code chính thức của Olivia Music#6682'))
+app.listen(3000, () => console.log(chalk.green('[EXPRESS] Listen on port 3000')))
