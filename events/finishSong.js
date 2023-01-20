@@ -12,7 +12,7 @@ module.exports = {
         const array = [...require('../index').message]
         const index = array.map(i => i.guild).indexOf(queue.textChannel.guild.id)
         const data = require('../index').message[index]
-        await queue.textChannel.messages.cache.get(data.message)?.delete().catch(e => { })
+        await queue.textChannel.messages.cache.get(data?.message)?.delete().catch(e => { })
         require('../index').message.splice(index, 1)
     }
 }

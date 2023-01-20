@@ -22,6 +22,15 @@ module.exports = {
         } else if (interaction.isButton()) {
             const distube = interaction.client.distube
             const queue = distube.getQueue(interaction)
+            if (!queue) {
+                require('../index').message.splice(
+                    [...require('../index').message].map(i => i.guild).indexOf(interaction), 1
+                )
+                return interaction.update({
+                    content: '🛑 Đài phát thanh đang trống',
+                    components: []
+                })
+            }
             /**
              * @param {Boolean} play 
              * @returns 
@@ -88,9 +97,6 @@ module.exports = {
                         content: '⏹ Đã dừng phát nhạc',
                         components: []
                     })
-                    require('../index').message.splice(
-                        [...require('../index').message].map(i => i.guild).indexOf(interaction), 1
-                    )
                     break;
                 case 'previous':
                     distube.previous(interaction)
