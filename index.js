@@ -42,5 +42,6 @@ client.login(process.env.TOKEN)
 
 const express = require('express')
 const app = express()
+const port = 3000, hostname = '0.0.0.0'
 app.get('/', (req, res) => res.send('Code chính thức của Olivia Music#6682'))
-app.listen(3000, () => console.log(chalk.green('[EXPRESS] Listen on port 3000')))
+app.listen(port, hostname, () => console.log(chalk.green(`[EXPRESS] Listen on https://${hostname}:${port}`)))
