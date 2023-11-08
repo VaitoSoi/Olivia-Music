@@ -37,12 +37,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Olivia = void 0;
 const discord_js_1 = __importDefault(require("discord.js"));
-const Player = __importStar(require("discord-player"));
 const node_fs_1 = __importDefault(require("node:fs"));
 const ascii_table3_1 = __importDefault(require("ascii-table3"));
 const node_path_1 = __importDefault(require("node:path"));
+const Player = __importStar(require("discord-player"));
 const command_1 = require("./command");
 const logger_1 = require("./logger");
+const expres_1 = require("./expres");
 class Olivia {
     constructor(env) {
         this.env = env;
@@ -60,13 +61,16 @@ class Olivia {
                 repliedUser: true
             }
         });
-        this.player = new Player.Player(this.client, { skipFFmpeg: true });
+        this.player = new Player.Player(this.client);
+        this.express = new expres_1.OliviaExpress(this);
         this.logger.debug('global', 'Initialized client');
     }
     run() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.handleEvent('./src/events');
-            yield this.handleCommand('./src/commands');
+            yield this.handleEvent(node_path_1.default.join(__dirname, '..', 'events'));
+            yield this.handleCommand(node_path_1.default.join(__dirname, '..', 'commands'));
+            yield this.player.extractors.loadDefault();
+            this.express.start(8000);
             this.client.on(discord_js_1.default.Events.ClientReady, (client) => {
                 this.logger.debug('discord', `Client ${client.user.tag} (${client.user.id}) is ready!`);
                 this.registerCommand(client);
@@ -75,26 +79,39 @@ class Olivia {
             this.client.on(discord_js_1.default.Events.Warn, (warn) => this.logger.warn('discord', warn));
             this.client.on(discord_js_1.default.Events.Error, (error) => this.logger.error('discord', error));
             this.client.on(discord_js_1.default.Events.ShardError, (error) => this.logger.error('discord', error));
-            this.player.on(Player.PlayerEvent.error, (error) => this.logger.error('player', error));
+            this.player.events.on('error', (queue, error) => this.logger.error('player', `Occur error at guild ${queue.guild.name}: ${error}`));
             this.client.login(this.env.discord.token)
                 .then((token) => this.logger.debug('discord', `Logined with token: ${token}`))
                 .catch((error) => this.logger.error('discord', error));
         });
     }
-    handleEvent(path) {
+    destroy() {
         return __awaiter(this, void 0, void 0, function* () {
-            const files = node_fs_1.default.readdirSync(path).filter(this.pathUtil);
+            yield this.client.destroy();
+            yield this.player.destroy();
+        });
+    }
+    handleEvent(path) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const files = node_fs_1.default.readdirSync(path).filter((file) => this.pathUtil(node_path_1.default.join(path, file)));
             let listend = [];
-            files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+            for (let file of files) {
                 const event = (yield Promise.resolve(`${node_path_1.default.join(path, file)}`).then(s => __importStar(require(s)))).default;
                 if (!event)
-                    return;
+                    continue;
                 if (event.type == 'discord')
-                    (event.once == true ? this.client.once : this.client.on)(event.name, (...args) => event.execute(this, ...args));
+                    if (event.once)
+                        this.client.once(event.name, (...args) => event.execute(this, ...args));
+                    else
+                        this.client.on(event.name, (...args) => event.execute(this, ...args));
                 else if (event.type == 'player')
-                    (event.once == true ? this.player.once : this.player.on)(event.name, (...args) => event.execute(this, ...args));
-                listend.push([file, event.name, event.type.toUpperCase()]);
-            }));
+                    if (event.once)
+                        this.player.events.once(event.name, (...args) => event.execute(this, ...args));
+                    else
+                        this.player.events.on(event.name, (...args) => event.execute(this, ...args));
+                void listend.push([file, event.name, (_a = event.type) === null || _a === void 0 ? void 0 : _a.toUpperCase()]);
+            }
             this.logger.debug('global', `Listened to ${listend.length} event(s)`, { mode: null });
             this.logger.debug('global', new ascii_table3_1.default.AsciiTable3('Olivia Events Listener')
                 .setHeading('File', 'Event Name', 'Listener')
@@ -104,16 +121,17 @@ class Olivia {
     }
     handleCommand(path) {
         return __awaiter(this, void 0, void 0, function* () {
-            const files = node_fs_1.default.readdirSync(path).filter(this.pathUtil);
+            const files = node_fs_1.default.readdirSync(path).filter((file) => this.pathUtil(node_path_1.default.join(path, file)));
             let handled = [];
-            files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+            for (let file of files) {
                 const command = (yield Promise.resolve(`${node_path_1.default.join(path, file)}`).then(s => __importStar(require(s)))).default;
                 if (!command)
-                    return;
-                this.commands.collection.set(command.name, command);
+                    continue;
+                const name = command instanceof command_1.CommandBuilder ? command.name : command.data.name;
+                this.commands.collection.set(name, command);
                 this.commands.jsonArray.push(command instanceof command_1.CommandBuilder ? command.toJSON() : command.data.toJSON());
-                handled.push([file, command.name]);
-            }));
+                handled.push([file, name]);
+            }
             this.logger.debug('global', `Handled ${handled.length} command(s)`, { mode: null });
             this.logger.debug('global', new ascii_table3_1.default.AsciiTable3('Olivia Commands Handler')
                 .setHeading('File', 'Command Name')

@@ -10,6 +10,7 @@ class CommandBuilder extends discord_js_1.default.SlashCommandBuilder {
         super();
         this.execute = () => { };
         this.autocomplete = () => { };
+        this.setDMPermission(false);
     }
     setExecute(execute) {
         this.execute = execute;

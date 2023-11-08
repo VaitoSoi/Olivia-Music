@@ -25,7 +25,7 @@ class Logger {
         return this.fileStream = node_fs_1.default.createWriteStream(file, { encoding: 'utf-8' });
     }
     log(level, module, message, config) {
-        const log = message.split('\n').map(message => `${(0, dayjs_1.default)().format("DD/MM/YYYY HH:mm:ss")} [${level.toUpperCase()}] [${module.toUpperCase()}] ${message}`).join('\n');
+        const log = message.split('\n').map(message => `[${(0, dayjs_1.default)().format("DD/MM/YYYY HH:mm:ss")}] [${level.toUpperCase()}] [${module.toUpperCase()}] ${message}`).join('\n');
         if (!config || (config && (config.mode == null || config.mode.includes('console'))))
             console.log(log);
         if (this.fileStream && (!config || (config && (config.mode == null || config.mode.includes('file')))))
