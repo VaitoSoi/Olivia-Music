@@ -9,7 +9,7 @@
   "scripts": {
     "build": "echo \"> Compiling source code to JavaScript...\" && npx tsc && echo \"> Complete compiling :D\"",
     "debug": "echo \"> Debugging....\" && npx ts-node src/index.ts",
-    "run": "echo \"> Compiling source code to JavaScript...\" && npx tsc && echo \"> Complete compiling :D\" && echo \"> Running code...\" && node build/"
+    "run": "echo \"> Running code...\" && node build/"
   },
   "dependencies": {
     "@discord-player/extractor": "^4.4.5",
