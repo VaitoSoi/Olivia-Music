@@ -12,7 +12,7 @@ export default new EventBuilder()
                 new EmbedBuilder()
                     .setAuthor({
                         name: `${queue.guild.name} - Track Add`,
-                        iconURL: queue.guild.iconURL() || ''
+                        iconURL: queue.guild.iconURL() || undefined
                     })
                     .setDescription(
                         '**Đã thêm một bài hát:**\n' +

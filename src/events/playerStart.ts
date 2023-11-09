@@ -12,7 +12,7 @@ export default new EventBuilder()
                 new EmbedBuilder()
                     .setAuthor({
                         name: `${queue.guild.name} - Now Playing`,
-                        iconURL: queue.guild.iconURL() || ''
+                        iconURL: queue.guild.iconURL() || undefined
                     })
                     .setDescription(
                         '**Now playing:**\n' +

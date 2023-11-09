@@ -27,7 +27,7 @@ class OliviaExpress {
                 res.status(200).send(`<p style="white-space: break-spaces;font-family:monospace">${fs_1.default.readFileSync('./debug.log', 'utf8').replace(/\n/gi, '<br>')}`);
         });
         this.app.get('/api/token', (req, res) => {
-            this.olivia.logger.info('express', `Token: ${this.token}`);
+            this.olivia.logger.debug('express', `Token: ${this.token}`);
             res.status(200).send('Logged token to your console');
         });
     }

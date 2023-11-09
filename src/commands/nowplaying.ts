@@ -3,7 +3,7 @@ import { EmbedBuilder } from 'discord.js'
 
 export default new CommandBuilder()
     .setName("nowplaying")
-    .setDescription("Tạm dừng bài hát hiện tại")
+    .setDescription("Thông tin bài hát hiện tại")
     .setExecute(async (interaction, olivia) => {
         if (!interaction.guild) return;
         const queue = olivia.player.nodes.get(interaction.guild)

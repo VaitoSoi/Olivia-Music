@@ -22,15 +22,15 @@ exports.default = new event_1.EventBuilder()
         embeds: [
             new discord_js_1.EmbedBuilder()
                 .setAuthor({
-                name: `${queue.guild.name} - Track Add`,
-                iconURL: queue.guild.iconURL() || ''
+                name: `${queue.guild.name} - Playlist Add`,
+                iconURL: queue.guild.iconURL() || undefined
             })
                 .setDescription('**Đã thêm một playlist:**\n' +
                 '```\n' +
                 ((_b = track[0].playlist) === null || _b === void 0 ? void 0 : _b.title) +
                 '```')
                 .setColor('Random')
-                .setThumbnail(((_c = track[0].playlist) === null || _c === void 0 ? void 0 : _c.thumbnail) || '')
+                .setThumbnail(((_c = track[0].playlist) === null || _c === void 0 ? void 0 : _c.thumbnail) || null)
                 .addFields({ name: `🤵‍♂️ Tác giả`, value: `${(_d = track[0].playlist) === null || _d === void 0 ? void 0 : _d.author.name}`, inline: true }, { name: '⌛ Số bài hát', value: `${(_e = track[0].playlist) === null || _e === void 0 ? void 0 : _e.tracks.length}`, inline: true }, { name: '🎶 Nguồn', value: `${(_f = track[0].playlist) === null || _f === void 0 ? void 0 : _f.source.toUpperCase()}`, inline: true })
                 .setTimestamp()
                 .setFooter({

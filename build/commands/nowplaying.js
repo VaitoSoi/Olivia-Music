@@ -13,7 +13,7 @@ const command_1 = require("../lib/command");
 const discord_js_1 = require("discord.js");
 exports.default = new command_1.CommandBuilder()
     .setName("nowplaying")
-    .setDescription("Tạm dừng bài hát hiện tại")
+    .setDescription("Thông tin bài hát hiện tại")
     .setExecute((interaction, olivia) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     if (!interaction.guild)

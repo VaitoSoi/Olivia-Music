@@ -1,4 +1,4 @@
-import { QueryType, SearchQueryType } from "discord-player";
+import { QueryType, QueueRepeatMode, SearchQueryType } from "discord-player";
 import { CommandBuilder, CommandDataBuilder } from "../lib/command";
 import { ActionRowBuilder, ComponentType, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 
@@ -100,7 +100,10 @@ export default new CommandDataBuilder()
         if (olivia.player.nodes.get(interaction.guild) && !!botVC)
             await (await interaction.guild?.members.fetchMe())?.voice.disconnect()
 
-        let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild, { metadata: { message: undefined } });
+        let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild, { 
+            metadata: { message: undefined }, 
+            repeatMode: QueueRepeatMode.AUTOPLAY 
+        });
         // if (!botVC) 
         await queue.connect(userVC)
 

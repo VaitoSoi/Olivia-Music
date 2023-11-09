@@ -11,8 +11,8 @@ export default new EventBuilder()
             embeds: [
                 new EmbedBuilder()
                     .setAuthor({
-                        name: `${queue.guild.name} - Track Add`,
-                        iconURL: queue.guild.iconURL() || ''
+                        name: `${queue.guild.name} - Playlist Add`,
+                        iconURL: queue.guild.iconURL() || undefined
                     })
                     .setDescription(
                         '**Đã thêm một playlist:**\n' +
@@ -21,7 +21,7 @@ export default new EventBuilder()
                         '```'
                     )
                     .setColor('Random')
-                    .setThumbnail(track[0].playlist?.thumbnail || '')
+                    .setThumbnail(track[0].playlist?.thumbnail || null)
                     .addFields(
                         { name: `🤵‍♂️ Tác giả`, value: `${track[0].playlist?.author.name}`, inline: true },
                         { name: '⌛ Số bài hát', value: `${track[0].playlist?.tracks.length}`, inline: true },

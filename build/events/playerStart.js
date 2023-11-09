@@ -23,7 +23,7 @@ exports.default = new event_1.EventBuilder()
             new discord_js_1.EmbedBuilder()
                 .setAuthor({
                 name: `${queue.guild.name} - Now Playing`,
-                iconURL: queue.guild.iconURL() || ''
+                iconURL: queue.guild.iconURL() || undefined
             })
                 .setDescription('**Now playing:**\n' +
                 '```\n' +

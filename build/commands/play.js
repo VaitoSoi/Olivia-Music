@@ -64,7 +64,7 @@ exports.default = new command_1.CommandDataBuilder()
     .setDescription('Nguồn tìm kiếm')
     .addChoices({ name: "Tự động tìm kiếm", value: discord_player_1.QueryType.AUTO_SEARCH }, { name: "Tìm kiếm trên Youtube", value: discord_player_1.QueryType.YOUTUBE_SEARCH }, { name: "Tìm kiếm trên Spotify", value: discord_player_1.QueryType.SPOTIFY_SEARCH }, { name: "Tìm kiếm trên Apple Music", value: discord_player_1.QueryType.APPLE_MUSIC_SEARCH }, { name: "Tìm kiếm trên SoundCloud", value: discord_player_1.QueryType.SOUNDCLOUD_SEARCH }))))
     .setExecute((interaction, olivia) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (!interaction.guild)
         return;
     const userVC = (_b = (yield ((_a = interaction.guild) === null || _a === void 0 ? void 0 : _a.members.fetch(interaction.user)))) === null || _b === void 0 ? void 0 : _b.voice.channel;
@@ -77,9 +77,14 @@ exports.default = new command_1.CommandDataBuilder()
         return interaction.editReply({
             content: 'Bạn không trong cùng Voice Channel với bot D:'
         });
-    const queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild, { metadata: { message: undefined } });
-    if (!botVC)
-        yield queue.connect(userVC);
+    if (olivia.player.nodes.get(interaction.guild) && !!botVC)
+        yield ((_f = (yield ((_e = interaction.guild) === null || _e === void 0 ? void 0 : _e.members.fetchMe()))) === null || _f === void 0 ? void 0 : _f.voice.disconnect());
+    let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild, {
+        metadata: { message: undefined },
+        repeatMode: discord_player_1.QueueRepeatMode.AUTOPLAY
+    });
+    // if (!botVC) 
+    yield queue.connect(userVC);
     const subcommand = interaction.options.getSubcommand();
     const query = interaction.options.getString('query', true);
     const engine = interaction.options.getString('engine') || "auto";
@@ -88,7 +93,7 @@ exports.default = new command_1.CommandDataBuilder()
         queue.addTrack(search.playlist || search.tracks[0]);
         if (!queue.node.isPlaying() && !queue.node.isPaused())
             yield queue.node.play();
-        interaction.editReply(`Đã thêm \`${((_e = search.playlist) === null || _e === void 0 ? void 0 : _e.title) || search.tracks[0].title}\` vào hàng chờ`);
+        interaction.editReply(`Đã thêm \`${((_g = search.playlist) === null || _g === void 0 ? void 0 : _g.title) || search.tracks[0].title}\` vào hàng chờ`);
     }
     else {
         const label = [
