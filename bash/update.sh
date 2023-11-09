@@ -6,4 +6,8 @@ echo "> Updating packages...."
 yarn
 echo "> Updated"
 
-./compile.sh
+if [ -f ./compile.sh ]; then
+    bash ./compile.sh
+else
+    bash ./bash/compile.sh
+fi
