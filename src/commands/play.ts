@@ -100,10 +100,8 @@ export default new CommandDataBuilder()
         if (olivia.player.nodes.get(interaction.guild) && !!botVC)
             await (await interaction.guild?.members.fetchMe())?.voice.disconnect()
 
-        let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild, { 
-            metadata: { message: undefined }, 
-            repeatMode: QueueRepeatMode.AUTOPLAY 
-        });
+        let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild);
+        queue.setRepeatMode(QueueRepeatMode.AUTOPLAY)
         // if (!botVC) 
         await queue.connect(userVC)
 
@@ -153,7 +151,7 @@ export default new CommandDataBuilder()
             collector.on('collect', async (selectMenu) => {
                 if (selectMenu.customId != 'song_selector') return
                 if (!selectMenu.guild) return
-                const song = search.tracks[Number(selectMenu.component.options[0].value)]
+                const song = search.tracks[Number(selectMenu.values[0])]
                 queue.addTrack(song)
                 if (!queue.node.isPlaying() && !queue.node.isPaused()) queue.node.play()
                     .catch((err) => olivia.logger.error('player', err))
