@@ -33,7 +33,7 @@ export class Olivia {
                 repliedUser: true
             }
         })
-        this.player = new Player.Player(this.client)
+        this.player = new Player.Player(this.client, {})
         this.express = new OliviaExpress(this)
 
         this.logger.debug('global', 'Initialized client')
