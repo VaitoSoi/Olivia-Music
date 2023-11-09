@@ -1,3 +1,4 @@
+import { QueueRepeatMode } from "discord-player";
 import { CommandBuilder } from "../lib/command";
 
 export default new CommandBuilder()
@@ -14,6 +15,7 @@ export default new CommandBuilder()
         })
         if (!interaction.guild) return
 
+        olivia.player.nodes.get(interaction.guild)?.setRepeatMode(QueueRepeatMode.OFF)
         olivia.player.nodes.get(interaction.guild)?.node.stop()
         interaction.editReply(`Đã dừng phát nhạc`)
     })
