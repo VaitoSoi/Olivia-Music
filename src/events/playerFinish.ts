@@ -6,7 +6,8 @@ export default new EventBuilder()
     .setOnce(false)
     .setType('player')
     .setExecute((olivia, queue: GuildQueue) => {
-        console.log('END')
-        queue.setRepeatMode(QueueRepeatMode.OFF)
-        queue.node.stop(true);
+        if (queue.tracks.toArray().length == 0) {
+            queue.setRepeatMode(QueueRepeatMode.OFF)
+            queue.node.stop(true);
+        }
     })

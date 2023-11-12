@@ -97,7 +97,7 @@ export default new CommandDataBuilder()
         if (!!botVC && botVC.id != userVC.id) return interaction.editReply({
             content: 'Bạn không trong cùng Voice Channel với bot D:'
         })
-        if (olivia.player.nodes.get(interaction.guild) && !!botVC)
+        if (!olivia.player.nodes.get(interaction.guild) && !!botVC)
             await (await interaction.guild?.members.fetchMe())?.voice.disconnect()
 
         let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild);
