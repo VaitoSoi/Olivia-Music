@@ -139,7 +139,11 @@ export default new CommandDataBuilder()
                                         new StringSelectMenuOptionBuilder()
                                             .setDefault(false)
                                             .setLabel(`${track.title}`)
-                                            .setDescription(`Author: ${track.author} | Duration: ${track.duration}`)
+                                            .setDescription((() => { 
+                                                let author = track.author
+                                                author = author.length >= 15 ? author.substring(0, 15) + '...': author
+                                                return `Author: ${author} | Duration: ${track.duration}`
+                                            })())
                                             .setValue(index + '')
                                             .setEmoji(label[index])
                                     )

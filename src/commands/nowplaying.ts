@@ -14,8 +14,8 @@ export default new CommandBuilder()
             embeds: [
                 new EmbedBuilder()
                     .setAuthor({
-                        name: `${queue.guild.name} - Queue`,
-                        iconURL: queue.guild.iconURL() || ''
+                        name: queue.guild.name || 'Queue',
+                        iconURL: queue.guild.iconURL() || undefined
                     })
                     .setDescription(
                         '**Đã thêm một bài hát:**\n' +
@@ -33,7 +33,7 @@ export default new CommandBuilder()
                     .setTimestamp()
                     .setFooter({
                         text: `${olivia.client.user?.tag}`,
-                        iconURL: olivia.client.user?.avatarURL() || ''
+                        iconURL: olivia.client.user?.avatarURL() || undefined
                     })
             ]
         })
