@@ -94,16 +94,20 @@ export default new CommandDataBuilder()
             content: 'Bạn không trong Voice Channel :c'
         })
         const botVC = (await interaction.guild?.members.fetchMe())?.voice.channel
+        let connect = false
         if (!!botVC && botVC.id != userVC.id) return interaction.editReply({
             content: 'Bạn không trong cùng Voice Channel với bot D:'
         })
-        if (!olivia.player.nodes.get(interaction.guild) && !!botVC)
-            await (await interaction.guild?.members.fetchMe())?.voice.disconnect()
+        if (olivia.player.nodes.get(interaction.guild) == null) {
+            if (!!botVC)
+                await (await interaction.guild?.members.fetchMe())?.voice.disconnect()
+            connect = true
+        }
 
         let queue = olivia.player.nodes.get(interaction.guild) || olivia.player.nodes.create(interaction.guild);
         queue.setRepeatMode(QueueRepeatMode.AUTOPLAY)
-        // if (!botVC) 
-        await queue.connect(userVC)
+        if (connect == true)
+            await queue.connect(userVC)
 
         const subcommand = interaction.options.getSubcommand()
         const query = interaction.options.getString('query', true)
