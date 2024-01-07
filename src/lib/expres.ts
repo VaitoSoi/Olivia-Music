@@ -2,9 +2,11 @@ import { Olivia } from ".";
 import express from 'express'
 import fs from 'fs'
 import { randomUUID } from 'node:crypto'
+import { Server } from 'node:http'
 
 export class OliviaExpress {
-    private app: express.Express = express()
+    public app: express.Express = express()
+    public server?: Server;
     private token: string = randomUUID()
 
     constructor(private olivia: Olivia) { }
@@ -13,7 +15,8 @@ export class OliviaExpress {
         this.olivia.logger.debug('express', `Listening on port ${port}`)
         this.olivia.logger.debug('express', `Token: ${this.token}`)
 
-        this.app.listen(port)
+        this.server = this.app.listen(port)
+        // this.app.
 
         this.app.get('/', (req, res) => {
             res.status(200).send(`<a href="/api/log?token=${req.query.token || ''}">Get debug.log</a><br><a href="/api/token">Log token to console</a>`)

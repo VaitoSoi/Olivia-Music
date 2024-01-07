@@ -62,7 +62,8 @@ export class Olivia {
     }
     public async destroy(): Promise<void> {
         await this.client.destroy()
-        await this.player.destroy()
+        this.express.server?.close()
+        // await this.player.destroy()
     }
 
     private async handleEvent(path: string): Promise<void> {
